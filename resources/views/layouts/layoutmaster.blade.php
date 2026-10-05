@@ -56,7 +56,22 @@
   }
 
   @media (max-width: 860px){
-    body{ grid-template-columns:1fr; grid-template-areas: "header" "main" "footer"; }
+    body{ 
+      grid-template-columns: 1fr; 
+      /* Định nghĩa rõ thứ tự xếp dọc khi thu nhỏ màn hình */
+      grid-template-rows: 68px auto 1fr auto;
+      grid-template-areas: 
+        "header" 
+        "sidebar"
+        "main" 
+        "footer"; 
+    }
+    
+    /* Ép sidebar và các thành phần phụ giãn full 100% chiều rộng, không bị bóp méo */
+    aside, .sidebar {
+      width: 100% !important;
+      height: auto !important;
+    }
   }
 </style>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">

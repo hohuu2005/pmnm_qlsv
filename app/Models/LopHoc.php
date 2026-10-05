@@ -15,5 +15,6 @@
             'ghi_chu',
             'si_so',
             'trang_thai',
+            'sdt_gvcn'
         ];
  }

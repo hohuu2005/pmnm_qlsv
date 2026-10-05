@@ -11,3 +11,4 @@ use App\Models\LopHoc;
         LopHoc::factory() ->count(10) ->create();
     }
  }
+ 

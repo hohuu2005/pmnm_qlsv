@@ -1,86 +1,85 @@
-{{-- resources/views/partials/sidebar.blade.php --}}
-@push('styles')
 <style>
-    aside{
-        grid-area:sidebar; background:var(--navy); padding:22px 14px;
-        display:flex; flex-direction:column; gap:26px; overflow-y:auto;
-    }
-    .nav-group-label{
-        font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
-        color:#7A85AB; padding:0 12px; margin-bottom:9px; font-weight:600;
-    }
-    .nav-list{ list-style:none; display:flex; flex-direction:column; gap:3px; }
-    .nav-list a{
-        display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px;
-        text-decoration:none; color:#B9C0DC; font-size:13.5px; font-weight:500;
-        transition:background .15s ease, color .15s ease;
-    }
-    .nav-list a:hover{ background:var(--navy-2); color:#F5F1E8; }
-    .nav-list a.active{ background:var(--gold-dim); color:var(--gold); box-shadow:inset 3px 0 0 var(--gold); }
-    .nav-list a .icon{ width:17px; height:17px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
-    .nav-list a .count{ margin-left:auto; font-family:'JetBrains Mono', monospace; font-size:10.5px; color:#7A85AB; }
-    .nav-list a.active .count{ color:var(--gold); }
-    .sidebar-divider{
-        margin-top:auto; padding:14px 12px; border-top:1px solid var(--navy-border);
-        font-size:11px; color:#7A85AB; line-height:1.5;
-    }
-
-    @media (max-width: 860px){
-        aside{ display:none; }
-    }
+    /* CSS chuẩn theo mẫu HUCE.Web */
+    .sidebar { background-color: #1e3a5f; color: #fff; width: 260px; min-height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .sidebar .logo { font-size: 22px; font-weight: bold; padding: 20px; background-color: #162b48; color: #f8c146; }
+    .sidebar .logo span { color: #fff; }
+    .nav-group-label { font-size: 11px; text-transform: uppercase; color: #8ba1b8; margin: 25px 20px 10px; font-weight: bold; letter-spacing: 1px; }
+    .nav-list { list-style: none; padding: 0; margin: 0; }
+    .nav-list li a { display: block; padding: 12px 20px; color: #d1dfed; text-decoration: none; font-size: 14px; transition: 0.2s; border-left: 3px solid transparent; }
+    .nav-list li a:hover, .nav-list li.active a { background-color: #2a4d7a; color: #fff; border-left-color: #f8c146; }
 </style>
-@endpush
 
-<aside>
-    <nav>
-        <div class="nav-group-label">Tổng quan</div>
+{{-- Lấy dữ liệu Menu động từ Database --}}
+@php
+    $dynamicMenus = \App\Models\Menu::where('trangthai', 'Hoạt động')->orderBy('id', 'asc')->get();
+@endphp
+
+<div class="sidebar">
+    <div class="logo">HUCE<span>.Web</span></div>
+    
+    {{-- CHUNG: Ai cũng xem được --}}
+    <div class="nav-group-label">CHUNG</div>
+    <ul class="nav-list">
+        <li><a href="{{ route('dashboard') }}">Tổng quan</a></li>
+    </ul>
+
+    {{-- KHÔNG GIAN HỌC TẬP: Chỉ dành cho Sinh viên --}}
+    @if(Auth::check() && Auth::user()->role == 'sinh_vien')
+        <div class="nav-group-label">HỌC TẬP</div>
         <ul class="nav-list">
-            <li><a href="#" class="active">
-                <span class="icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
-                </span>
-                Dashboard
-            </a></li>
+            <li><a href="{{ route('sv.diem') }}">Tra cứu điểm</a></li>
+            <li><a href="{{ route('baigiang.index') }}">Tài liệu môn học</a></li>
+            <li><a href="{{ route('sv.baitap') }}">Nộp bài tập</a></li>
         </ul>
-    </nav>
+    @endif
 
-    <nav>
-        <div class="nav-group-label">Học vụ</div>
+    {{-- QUẢN LÝ HỌC VỤ: Dành cho Admin và Giảng viên --}}
+    @if(Auth::check() && in_array(Auth::user()->role, ['admin', 'giang_vien']))
+        <div class="nav-group-label">DANH MỤC HỌC VỤ</div>
         <ul class="nav-list">
-            <li><a href="{{ url('/sinhvien') }}">
-                <span class="icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
-                </span>
-                Sinh viên <span class="count">3</span>
-            </a></li>
-            <li><a href="#">
-                <span class="icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                </span>
-                Lớp học
-            </a></li>
-            <li><a href="#">
-                <span class="icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-                </span>
-                Điểm số
-            </a></li>
+            <li><a href="{{ url('/sinh-vien') }}">Sinh viên</a></li>
+            <li><a href="{{ route('baigiang.index') }}">Bài giảng</a></li>
+            <li><a href="{{ route('baitap.index') }}">Bài tập</a></li>
+            <li><a href="{{ route('diemso.chon_mon_lop') }}">Điểm số</a></li>
+            <li><a href="#">Tài liệu</a></li>
+            {{-- Môn học chỉ Admin mới được quyền thêm/sửa/xóa --}}
+            @if(Auth::user()->role == 'admin')
+                <li><a href="{{ route('monhoc.index') }}">Môn học</a></li>
+            @endif
         </ul>
-    </nav>
+    @endif
 
-    <nav>
-        <div class="nav-group-label">Hệ thống</div>
+    {{-- QUẢN TRỊ HỆ THỐNG: Chỉ dành cho Admin --}}
+    @if(Auth::check() && Auth::user()->role == 'admin')
+        <div class="nav-group-label">QUẢN TRỊ</div>
         <ul class="nav-list">
-            <li><a href="#">
-                <span class="icon">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
-                </span>
-                Cài đặt
-            </a></li>
+            <li class="{{ request()->routeIs('lophoc.*') ? 'active' : '' }}">
+                <a href="{{ route('lophoc.index') }}">Quản lý lớp học</a>
+            </li>
+            <li class="{{ request()->routeIs('menu.*') ? 'active' : '' }}">
+                <a href="{{ route('menu.index') }}">Quản lý menu</a>
+            </li>
         </ul>
-    </nav>
+    @endif
 
-    <div class="sidebar-divider">
-        Học kỳ 1 · Năm học 2026–2027
-    </div>
-</aside>
+    {{-- HỖ TRỢ: Ai cũng xem được --}}
+    <div class="nav-group-label">HỖ TRỢ</div>
+    <ul class="nav-list">
+        <li><a href="{{ route('hotro.huongdan') }}">Hướng dẫn</a></li>
+        <li><a href="{{ route('hotro.faq') }}">Câu hỏi thường gặp</a></li>
+    </ul>
+
+    {{-- MENU ĐỘNG --}}
+    @if($dynamicMenus->count() > 0)
+        <div class="nav-group-label">MỞ RỘNG</div>
+        <ul class="nav-list">
+            @foreach($dynamicMenus as $menu)
+                <li>
+                    <a href="{{ url('/' . $menu->slug) }}">
+                        {{ $menu->tenhienthi }}
+                    </a>
+                </li>
+            @endforeach
+        </ul>
+    @endif
+</div>

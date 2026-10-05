@@ -13,12 +13,16 @@ return new class extends Migration
     {
         Schema::create('lop_hocs', function (Blueprint $table) {
             $table->id();
-            $table->string('ten_lop');
             $table->string('ma_lop')->unique();
+            $table->string('ten_lop');
             $table->string('giao_vien');
+            
+            // BẮT BUỘC PHẢI CÓ ->nullable() Ở 2 CỘT NÀY
+            $table->string('sdt_gvcn')->nullable(); 
             $table->text('ghi_chu')->nullable();
-            $table->integer('si_so');
-            $table->boolean('trang_thai')->default(true);
+            
+            $table->string('trang_thai')->default('Hoạt động');
+            $table->integer('si_so')->default(0);
             $table->timestamps();
         });
     }

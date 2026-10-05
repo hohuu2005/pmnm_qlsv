@@ -35,9 +35,20 @@
         width:34px; height:34px; border-radius:50%; background:var(--navy-2); border:1px solid var(--gold);
         display:flex; align-items:center; justify-content:center;
         font-family:'Fraunces', serif; font-size:13px; font-weight:700; color:var(--gold);
+        text-transform: uppercase;
     }
     .header-user .name{ font-size:13px; font-weight:600; color:#F5F1E8; }
     .header-user .role{ font-size:11px; color:#9FA8C9; }
+    
+    /* Nút đăng xuất style matching với theme */
+    .btn-logout {
+        background: transparent; border: 1px solid var(--gold); color: var(--gold); 
+        padding: 5px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; 
+        margin-left: 15px; transition: all 0.2s; font-weight: bold;
+    }
+    .btn-logout:hover {
+        background: var(--gold); color: var(--navy);
+    }
 </style>
 @endpush
 
@@ -50,18 +61,27 @@
         </div>
     </div>
 
-    <div class="header-search">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke-width="2">
-            <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input type="text" placeholder="Tìm sinh viên, lớp học, mã số...">
-    </div>
-
+    @if(Auth::check())
     <div class="header-user">
-        <div class="avatar">H</div>
+        <!-- Tự động cắt chữ cái đầu tiên của tên làm Avatar -->
+        <div class="avatar">{{ mb_substr(Auth::user()->name, 0, 1) }}</div>
         <div>
-            <div class="name">Huu</div>
-            <div class="role">Quản trị viên</div>
+            <!-- Hiển thị tên động -->
+            <div class="name">{{ Auth::user()->name }}</div>
+            <!-- Dịch Role tiếng Anh sang chức danh tiếng Việt -->
+            <div class="role">
+                @if(Auth::user()->role == 'admin') Quản trị viên
+                @elseif(Auth::user()->role == 'giang_vien') Giảng viên
+                @else Sinh viên
+                @endif
+            </div>
         </div>
+        
+        <!-- Form Đăng xuất -->
+        <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+            @csrf
+            <button type="submit" class="btn-logout">Đăng xuất</button>
+        </form>
     </div>
+    @endif
 </header>
