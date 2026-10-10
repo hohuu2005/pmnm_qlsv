@@ -1,12 +1,38 @@
 <style>
     /* CSS chuẩn theo mẫu HUCE.Web */
-    .sidebar { background-color: #1e3a5f; color: #fff; width: 260px; min-height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .sidebar { 
+        background-color: #1e3a5f; 
+        color: #fff; 
+        width: 260px; 
+        min-height: 100vh; 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        flex-shrink: 0; /* QUAN TRỌNG: Ngăn sidebar bị ép nhỏ làm vỡ form */
+    }
     .sidebar .logo { font-size: 22px; font-weight: bold; padding: 20px; background-color: #162b48; color: #f8c146; }
     .sidebar .logo span { color: #fff; }
     .nav-group-label { font-size: 11px; text-transform: uppercase; color: #8ba1b8; margin: 25px 20px 10px; font-weight: bold; letter-spacing: 1px; }
     .nav-list { list-style: none; padding: 0; margin: 0; }
     .nav-list li a { display: block; padding: 12px 20px; color: #d1dfed; text-decoration: none; font-size: 14px; transition: 0.2s; border-left: 3px solid transparent; }
     .nav-list li a:hover, .nav-list li.active a { background-color: #2a4d7a; color: #fff; border-left-color: #f8c146; }
+
+    /* XỬ LÝ CO GIÃN TRÊN MÀN HÌNH NHỎ (Dưới 768px) */
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 100%; /* Bung chiều ngang 100% để Form rớt xuống dưới */
+            min-height: auto; 
+            padding-bottom: 20px;
+        }
+        .nav-list {
+            display: flex; /* Dàn menu thành các cột ngang */
+            flex-wrap: wrap;
+        }
+        .nav-list li {
+            width: 50%; /* 2 Menu trên cùng 1 hàng cho tiết kiệm diện tích */
+        }
+        .nav-group-label {
+            margin: 15px 20px 5px;
+        }
+    }
 </style>
 
 {{-- Lấy dữ liệu Menu động từ Database --}}

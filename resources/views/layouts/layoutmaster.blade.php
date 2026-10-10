@@ -54,23 +54,29 @@
     display:inline-block; margin-top:10px; background:#fff; border:1px solid var(--line);
     padding:4px 10px; border-radius:6px; font-size:12px; color:var(--navy);
   }
+  /* ===== Ánh xạ các thành phần vào đúng khu vực của Grid ===== */
+  .header { grid-area: header; } /* Giả sử file header.blade.php dùng class .header */
+  .sidebar { grid-area: sidebar; } /* Sidebar của em đang dùng class .sidebar */
+  footer, .footer { grid-area: footer; }
 
   @media (max-width: 860px){
     body{ 
       grid-template-columns: 1fr; 
-      /* Định nghĩa rõ thứ tự xếp dọc khi thu nhỏ màn hình */
-      grid-template-rows: 68px auto 1fr auto;
+      /* Bỏ 'auto' của sidebar đi, chỉ giữ lại header, main, footer */
+      grid-template-rows: 68px 1fr 48px;
       grid-template-areas: 
         "header" 
-        "sidebar"
         "main" 
         "footer"; 
     }
     
-    /* Ép sidebar và các thành phần phụ giãn full 100% chiều rộng, không bị bóp méo */
+    /* Ẩn hoàn toàn Sidebar trên màn hình nhỏ để nhường chỗ cho Form */
     aside, .sidebar {
-      width: 100% !important;
-      height: auto !important;
+      display: none !important;
+    }
+    
+    main {
+      padding: 20px 15px; /* Thu nhỏ lề của main để form rộng rãi hơn trên mobile */
     }
   }
 </style>
